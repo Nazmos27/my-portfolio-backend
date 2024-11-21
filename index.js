@@ -120,40 +120,19 @@ async function run() {
 
         //Data fetching related API
 
-        app.get('/blog', async (req, res) => {
-            const result = await classCollection.find().toArray()
-            res.send(result)
-        })
+        app.get('/blogs', async (req, res) => {
+            try {
+                const result = await blogCollection.find().toArray();
+                res.send(result);
+            } catch (error) {
+                res.status(500).send({ error: true, message: 'Failed to fetch blogs' });
+            }
+        });
 
-       
 
-       
-
-        //Data Storing/Updating related API
-
-        // app.post('/selectedClasses', async (req, res) => {
-        //     const selectedClass = req.body
-        //     const query = {name : selectedClass?.name , select_by: selectedClass.select_by }
-        //     const existAlready = await selectedClassCollection.findOne(query)
-        //     if(existAlready){
-        //         return res.send({message : 'already selected'})
-        //     }
-        //     const result = await selectedClassCollection.insertOne(selectedClass)
-        //     res.send(result)
-
-        // })
-
-        // app.delete('/selectedClasses',async(req,res) => {
-        //     const id = req.query.id
-        //     const query = {_id : new ObjectId(id)}
-        //     const deletedResult =  await selectedClassCollection.deleteOne(query);
-        //     console.log('deleted Result ',deletedResult )
-        //     res.send(deletedResult)
-        // })
-
-        app.post('/blog', async (req, res) => {
+        app.post('/blogs', async (req, res) => {
             const classData = req.body
-            const result = await classCollection.insertOne(classData)
+            const result = await blogCollection.insertOne(classData)
             res.send(result)
         })
 
@@ -167,12 +146,6 @@ async function run() {
     }
 }
 run().catch(console.dir);
-
-
-
-
-
-
 
 app.listen(port, () => {
     console.log(`Portfolio server is running on port ${port}`);
